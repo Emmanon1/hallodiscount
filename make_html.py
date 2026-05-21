@@ -1,0 +1,5 @@
+b=open('b64_out.txt').read()
+f=open('view_b64.html','w')
+f.write('<textarea rows=80 cols=80>'+b+'</textarea>')
+f.close()
+print('Done')
