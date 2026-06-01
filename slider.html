@@ -80,3 +80,136 @@
             cursor: pointer;
             z-index: 2;
         }
+        .slider-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #01615F;
+            font-size: 14px;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 1;
+        }
+        #mainImage {
+            display: none;
+            width: 100%;
+            border-radius: 12px;
+        }
+        .validated .slider-container {
+            background-color: #01615F;
+            border-color: #01615F;
+        }
+        .validated .slider-text {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container" id="mainContainer">
+        <div class="background-image">
+            <img id="bgImage" src="Image 1.jpeg" alt="Commande">
+            <div class="slider-overlay">
+                <div class="slider-container" id="sliderContainer">
+                    <div class="slider-fill" id="sliderFill"></div>
+                    <div class="slider-thumb" id="sliderThumb">&#10140;</div>
+                    <div class="slider-text">Valider pour r&#233;cup&#233;rer</div>
+                </div>
+            </div>
+        </div>
+        <img id="mainImage" src="Image 2.jpeg" alt="Validation">
+    </div>
+
+<script>
+    const thumb = document.getElementById('sliderThumb');
+    const container = document.getElementById('sliderContainer');
+    const fill = document.getElementById('sliderFill');
+    const mainImage = document.getElementById('mainImage');
+    const bgImage = document.getElementById('bgImage');
+    const mainContainer = document.getElementById('mainContainer');
+
+    let isDragging = false;
+    let startX = 0;
+    let thumbLeft = 4;
+
+    function initMaxLeft() {
+        return container.offsetWidth - thumb.offsetWidth - 4;
+    }
+
+    thumb.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        startX = e.clientX - thumbLeft;
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        let newLeft = e.clientX - startX;
+        let currentMax = initMaxLeft();
+        if (newLeft < 4) newLeft = 4;
+        if (newLeft > currentMax) newLeft = currentMax;
+        thumbLeft = newLeft;
+        thumb.style.left = newLeft + 'px';
+        fill.style.width = (newLeft + 46) + 'px';
+    });
+
+    document.addEventListener('mouseup', function(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        let currentMax = initMaxLeft();
+        if (thumbLeft >= currentMax - 5) {
+            mainImage.src = 'Image 2.jpeg';
+            mainImage.style.display = 'block';
+            document.querySelector('.background-image').style.display = 'none';
+            thumb.style.left = currentMax + 'px';
+            fill.style.width = '100%';
+            container.style.backgroundColor = '#01615F';
+            document.querySelector('.slider-text').textContent = 'Valid\u00e9 !';
+            thumb.style.pointerEvents = 'none';
+        } else {
+            thumbLeft = 4;
+            thumb.style.left = '4px';
+            fill.style.width = '0px';
+        }
+    });
+
+    thumb.addEventListener('touchstart', function(e) {
+        isDragging = true;
+        startX = e.touches[0].clientX - thumbLeft;
+        e.preventDefault();
+    });
+
+    document.addEventListener('touchmove', function(e) {
+        if (!isDragging) return;
+        let newLeft = e.touches[0].clientX - startX;
+        let currentMax = initMaxLeft();
+        if (newLeft < 4) newLeft = 4;
+        if (newLeft > currentMax) newLeft = currentMax;
+        thumbLeft = newLeft;
+        thumb.style.left = newLeft + 'px';
+        fill.style.width = (newLeft + 46) + 'px';
+    });
+
+    document.addEventListener('touchend', function(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        let currentMax = initMaxLeft();
+        if (thumbLeft >= currentMax - 5) {
+            mainImage.src = 'Image 2.jpeg';
+            mainImage.style.display = 'block';
+            document.querySelector('.background-image').style.display = 'none';
+            thumb.style.left = currentMax + 'px';
+            fill.style.width = '100%';
+            container.style.backgroundColor = '#01615F';
+            document.querySelector('.slider-text').textContent = 'Valid\u00e9 !';
+            thumb.style.pointerEvents = 'none';
+        } else {
+            thumbLeft = 4;
+            thumb.style.left = '4px';
+            fill.style.width = '0px';
+        }
+    });
+</script>
+</body>
+</html>
